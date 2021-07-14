@@ -1,6 +1,5 @@
-spring:
-  security:
-    user:
-      name: user1
-      password: userPass1
-      roles: user
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info

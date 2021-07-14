@@ -94,6 +94,40 @@ public class PostEmployeesTest {
     }
 
     @Test
+    public void whenAddingNewEmployeeWithInvalidEmail_thenErrorStatusCodeAndResponse() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        employee.setEmail("john.doedoesemail");
+        employee.setPhone("415.111.1111");
+        employee.setOffice("322F");
+        employee.setRole("Sushi Monster");
+
+        mockMvc.perform(post("/employees", employee)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(employee)))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().string("Must be a valid email with oscorp.com domain"))
+                .andExpect(redirectedUrl(null));
+    }
+
+    @Test
+    public void whenAddingNewEmployeeWithEmailAtIncorrectDomain_thenErrorStatusCodeAndResponse() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        employee.setEmail("john.doe@gmail.com");
+        employee.setPhone("415.111.1111");
+        employee.setOffice("322F");
+        employee.setRole("Sushi Monster");
+
+        mockMvc.perform(post("/employees", employee)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(employee)))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().string("Must be a valid email with oscorp.com domain"))
+                .andExpect(redirectedUrl(null));
+    }
+
+    @Test
     public void whenAddingNewEmployeeWithoutPhone_thenErrorStatusCodeAndResponse() throws Exception {
         Employee employee = new Employee();
         employee.setName("John Doe");
@@ -110,6 +144,40 @@ public class PostEmployeesTest {
     }
 
     @Test
+    public void whenAddingNewEmployeeWitInvalidPhone_thenErrorStatusCodeAndResponse() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        employee.setEmail("john.doe@oscorp.com");
+        employee.setPhone("415-111-1111");
+        employee.setOffice("322F");
+        employee.setRole("Sushi Monster");
+
+        mockMvc.perform(post("/employees", employee)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(employee)))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().string("Must be a valid North American phone number with area code 415, in the format 415.456.7890"))
+                .andExpect(redirectedUrl(null));
+    }
+
+    @Test
+    public void whenAddingNewEmployeeWithPhoneWithIncorrectAreaCode_thenErrorStatusCodeAndResponse() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        employee.setEmail("john.doe@oscorp.com");
+        employee.setPhone("666.111.1111");
+        employee.setOffice("322F");
+        employee.setRole("Sushi Monster");
+
+        mockMvc.perform(post("/employees", employee)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(employee)))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().string("Must be a valid North American phone number with area code 415, in the format 415.456.7890"))
+                .andExpect(redirectedUrl(null));
+    }
+
+    @Test
     public void whenAddingNewEmployeeWithoutOffice_thenErrorStatusCodeAndResponse() throws Exception {
         Employee employee = new Employee();
         employee.setName("John Doe");
@@ -122,6 +190,23 @@ public class PostEmployeesTest {
                 .content(new ObjectMapper().writeValueAsString(employee)))
                 .andExpect(status().isNotAcceptable())
                 .andExpect(content().string("Please provide office"))
+                .andExpect(redirectedUrl(null));
+    }
+
+    @Test
+    public void whenAddingNewEmployeeWithInvalidOfficeRange_thenErrorStatusCodeAndResponse() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        employee.setEmail("john.doe@oscorp.com");
+        employee.setPhone("415.111.1111");
+        employee.setOffice("100Z");
+        employee.setRole("Sushi Monster");
+
+        mockMvc.perform(post("/employees", employee)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(employee)))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().string("Office must be in the range 100A - 599F"))
                 .andExpect(redirectedUrl(null));
     }
 

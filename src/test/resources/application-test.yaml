@@ -1,0 +1,12 @@
+dev-configuration:
+  employees:
+    - name: Michael Stone
+      office: 321B
+      email: michael.stone@oscorp.com
+      phone: 415.331.3321
+      role: Tier 3 Support Engineer
+    - name: Amber Johnson
+      office: 332C
+      email: amber.johnson@oscorp.com
+      phone: 415.337.4345
+      role: Senior Project Manager
